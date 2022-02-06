@@ -3,28 +3,33 @@
 #include <Adafruit_BMP280.h>
 #include "BmpSensor.h"
 
+/**
+ * Creates a new BMP Sensor and initializes it
+ */
 BmpSensor::BmpSensor() {
     this->BmpSensor::sensor_setup();
     this->state = SensorState::ASLEEP;
 }
 
+/**
+ * Function responsible for setting up the sensor and the I2C connection
+ */
 void BmpSensor::sensor_setup() {
-    Serial.begin(112500);
     while (!Serial) delay(100);   // wait for native usb
 
-    unsigned status;
-    status = this->bmp.begin(0x76); //set the correct I2C port
+    unsigned status = this->bmp.begin(0x76); //set the correct I2C port
 
     //query status and reboot the board if no sensor is detected
-    if (!status) {
+    if (!status)
         ESP.restart();
 
-    }
-
-/* Default settings from datasheet. */
+    //put sensor to standby mode
     this->enableStandbyMode();
 }
 
+/**
+ * Function to wake sensor up from standby mode
+ */
 void BmpSensor::wakeUp() {
     this->bmp.setSampling(Adafruit_BMP280::MODE_NORMAL,     /* Operating Mode. */
                           Adafruit_BMP280::SAMPLING_X2,     /* Temp. oversampling */
@@ -34,6 +39,9 @@ void BmpSensor::wakeUp() {
     );
 }
 
+/**
+ * Function to put sensor to standby mode
+ */
 void BmpSensor::enableStandbyMode() {
     this->bmp.setSampling(Adafruit_BMP280::MODE_SLEEP,     /* Operating Mode. */
                           Adafruit_BMP280::SAMPLING_X2,     /* Temp. oversampling */
@@ -43,22 +51,38 @@ void BmpSensor::enableStandbyMode() {
     );
 }
 
-void BmpSensor::sample() {
+/**
+ * read a sample from the sensor
+ * @return a struct containing all necessary sensor data
+ */
+sensor_data_t BmpSensor::sample() {
     //wake sensor up if it is in standby mode
     if (this->state == SensorState::ASLEEP)
         this->wakeUp();
 
+    //sample pressure and temperature
     sensors_event_t temp_event, pressure_event;
     this->bmp_temp->getEvent(&temp_event);
-    bmp_pressure->getEvent(&pressure_event);
+    this->bmp_pressure->getEvent(&pressure_event);
 
-    Serial.print(F("Temperature = "));
-    Serial.print(temp_event.temperature);
-    Serial.print(" °C | ");
 
-    Serial.print(F("Pressure = "));
-    Serial.print(pressure_event.pressure);
-    Serial.println(" hPa");
+    return sensor_data_t
+            {
+                    temp_event.temperature,
+                    pressure_event.pressure
+            };
+}
+
+/**
+ * Read a sample and put sensor to standby mode
+ * @return the sample read
+ */
+sensor_data_t BmpSensor::sampleLowEnergy() {
+    //read sample
+    sensor_data_t sampledData = this->sample();
+    //put sensor to standby
+    this->enableStandbyMode();
+    return sampledData;
 }
 
 
