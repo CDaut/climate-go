@@ -74,7 +74,8 @@ sensor_data_t BmpSensor::sample() {
 }
 
 /**
- * Read a sample and put sensor to standby mode
+ * Read a sample and put sensor to standby mode.
+ * !!! Do not use this if sampling time is <= 500ms !!!
  * @return the sample read
  */
 sensor_data_t BmpSensor::sampleLowEnergy() {
