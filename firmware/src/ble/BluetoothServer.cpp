@@ -8,6 +8,8 @@
 #define SERVICE_UUID "2150123c-af53-4038-bc92-ba3d0870a9e4"
 #define TEMPERATURE_CHARACTERISTIC_UUID "cba1d466-344c-4be3-ab3f-189f80dd7518"
 #define PRESSURE_CHARACTERISTIC_UUID "ca73b3ba-39f6-4ab3-91ae-186dc9577d99"
+#define BLINK_TIME_DELAY_MS 500
+#define BLINK_TIMES 5
 
 //Setup callbacks onConnect and onDisconnect
 class ServerCallbacks : public BLEServerCallbacks {
@@ -51,6 +53,9 @@ BluetoothServer::BluetoothServer() {
     //set initial values
     temperatureCharacteristic->setValue("NA");
     pressureCharacteristic->setValue("NA");
+
+    //allow advertiser function to be called
+    this->advertiserLock = false;
 }
 
 /**
@@ -87,6 +92,24 @@ void BluetoothServer::setPressure(float pressure) {
     sensorService
             ->getCharacteristic(PRESSURE_CHARACTERISTIC_UUID)
             ->setValue(pressure);
+}
+
+/**
+ * This method will start advertising via Bluetooth and blink the LED
+ */
+void BluetoothServer::startAdvertising() {
+    if (!this->advertiserLock) {
+        this->advertiserLock = true;
+        this->bleServer->getAdvertising()->start();
+        Serial.println("Starting Bluetooth advertising...");
+        for (int i = 0; i < BLINK_TIMES; ++i) {
+            digitalWrite(INTERNAL_LED_PIN, HIGH);
+            delay(BLINK_TIME_DELAY_MS);
+            digitalWrite(INTERNAL_LED_PIN, LOW);
+            delay(BLINK_TIME_DELAY_MS);
+        }
+        this->advertiserLock = false;
+    }
 }
 
 

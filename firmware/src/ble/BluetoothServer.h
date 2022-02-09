@@ -13,9 +13,11 @@ class BluetoothServer {
 private:
     BLEService *sensorService;
     BLEServer *bleServer;
+    bool advertiserLock;
 public:
     BluetoothServer();
 
+    void startAdvertising();
     void startServer();
     void setTemperature(float temperature);
     void setPressure(float pressure);
