@@ -1,5 +1,5 @@
 # Climate GO 
-Climate GO is a fully open source open hardware Sensor pack, to track and analyze personal air quality data. It's goal is to provide a way to monitor ones own air quality and motivate people to avoid polluted places and protect the environment.
+Climate GO is a fully open source open hardware Sensor pack, to track and analyze personal air quality data. Its goal is to provide a way to monitor ones own air quality and motivate people to avoid polluted places and protect the environment.
 
 ## Paradigms
 This project is intended to be open source, open hardware and open data oriented. It is of central importance to make this available to anyone who whishes to build a climate go device and to ensure no personal data is collected and stored. This is especially important because the climate data collected will be correlated with GPS information and could thus be used to construct a movement profile if not handled with uttermost care.
