@@ -17,7 +17,7 @@ public:
 
     sensor_data_t sample() override;
 
-    void startAsyncSampling();
+    [[noreturn]] void startAsyncSampling();
 
 
     void enableStandbyMode() override;

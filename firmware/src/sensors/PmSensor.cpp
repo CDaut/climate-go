@@ -21,19 +21,35 @@ PmSensor::PmSensor() {
     this->PmSensor::sensor_setup();
 }
 
-void PmSensor::startAsyncSampling() {
+[[noreturn]] void PmSensor::startAsyncSampling() {
 
-    this->enableStandbyMode();
-    PmSensor::sensorWait(SLEEP_TIME);
+    Serial.println("Started async task for PM sensor sampling.");
 
-    this->wakeUp();
-    sds011.perform_work();
+    while (true) {
+        this->wakeUp();
 
-    if (!sds011.query_data_auto_async(pm_tablesize, pm25_table, pm10_table)) {
-        Serial.println("measurement capture start failed");
+        //attach a callback on what to do when data sampling is complete
+        sds011.on_query_data_auto_completed([this](int n) {
+            Serial.println("Sampled new PM data.");
+            int pm25;
+            int pm10;
+            if (sds011.filter_data(n, pm25_table, pm10_table, pm25, pm10) &&
+                !isnan(pm10) && !isnan(pm25)) {
+                //set the right values
+                this->latestPM10 = float(pm10) / 10;
+                this->latestPM25 = float(pm25) / 10;
+            }
+        });
+
+        if (!sds011.query_data_auto_async(pm_tablesize, pm25_table, pm10_table)) {
+            Serial.println("measurement capture start failed");
+        }
+
+        PmSensor::sensorWait(MEASURE_TIME);
+
+        this->enableStandbyMode();
+        PmSensor::sensorWait(SLEEP_TIME);
     }
-
-    PmSensor::sensorWait(MEASURE_TIME);
 }
 
 /**
@@ -41,6 +57,7 @@ void PmSensor::startAsyncSampling() {
  */
 void PmSensor::enableStandbyMode() {
     if (sds011.set_sleep(true)) { this->state = SensorState::ASLEEP; }
+    Serial.println("PM sensor went to sleep mode.");
 }
 
 /**
@@ -48,6 +65,7 @@ void PmSensor::enableStandbyMode() {
  */
 void PmSensor::wakeUp() {
     if (sds011.set_sleep(false)) { this->state = SensorState::AWAKE; }
+    Serial.println("PM sensor woke up.");
 }
 
 /**
@@ -64,18 +82,6 @@ void PmSensor::sensor_setup() {
     //put the sensor into standby mode initially
     this->PmSensor::enableStandbyMode();
     Serial.println("SDS011 sensor initialized to standby mode.");
-
-    //attach a callback on what to do when data sampling is complete
-    sds011.on_query_data_auto_completed([this](int n) {
-        int pm25;
-        int pm10;
-        if (sds011.filter_data(n, pm25_table, pm10_table, pm25, pm10) &&
-            !isnan(pm10) && !isnan(pm25)) {
-            //set the right values
-            this->latestPM10 = float(pm10) / 10;
-            this->latestPM25 = float(pm25) / 10;
-        }
-    });
 }
 
 /**
@@ -85,7 +91,7 @@ void PmSensor::sensor_setup() {
 void PmSensor::sensorWait(int time) {
     uint32_t deadline = millis() + time * 1000;
     while (static_cast<int32_t>(deadline - millis()) > 0) {
-        delay(1000);
+        vTaskDelay(1000 / portTICK_PERIOD_MS);
         sds011.perform_work();
     }
 }
