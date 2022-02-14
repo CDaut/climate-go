@@ -14,6 +14,7 @@ public:
     BmpSensor();
 
     sensor_data_t sample() override;
+
     sensor_data_t sampleLowEnergy();
 
     void enableStandbyMode() override;

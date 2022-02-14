@@ -69,7 +69,9 @@ sensor_data_t BmpSensor::sample() {
     return sensor_data_t
             {
                     temp_event.temperature,
-                    pressure_event.pressure
+                    pressure_event.pressure,
+                    0.0,
+                    0.0
             };
 }
 

@@ -1,5 +1,5 @@
-#ifndef NEW_CLIMTE_GO_SENSOR_H
-#define NEW_CLIMTE_GO_SENSOR_H
+#ifndef FIRMWARE_SENSOR_H
+#define FIRMWARE_SENSOR_H
 
 #include <sensors/sensor_data_t.h>
 

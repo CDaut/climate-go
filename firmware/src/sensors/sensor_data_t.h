@@ -1,7 +1,5 @@
-#ifndef NEW_CLIMTE_GO_SENSOR_DATA_T_H
-#define NEW_CLIMTE_GO_SENSOR_DATA_T_H
-
-#include <types.h>
+#ifndef FIRMWARE_SENSOR_DATA_T_H
+#define FIRMWARE_SENSOR_DATA_T_H
 
 /**
  * This struct represents data read from any sensor.
@@ -11,6 +9,8 @@
 struct sensor_data_t {
     float temperature;
     float pressure;
+    float pm10;
+    float pm25;
 };
 
 #endif
