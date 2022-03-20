@@ -1,8 +1,10 @@
 package de.cdaut.climategoapp.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -18,7 +20,9 @@ import de.cdaut.climategoapp.databinding.ActivityDebugBinding;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class DebugActivity extends AppCompatActivity {
+import com.google.android.material.navigation.NavigationView;
+
+public class DebugActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private AppBarConfiguration appBarConfiguration;
     private ActivityDebugBinding binding;
@@ -37,7 +41,7 @@ public class DebugActivity extends AppCompatActivity {
 
         // drawer layout instance to toggle the menu icon to open
         // drawer and back button to close drawer
-        drawerLayout = findViewById(R.id.my_drawer_layout);
+        drawerLayout = findViewById(R.id.debug_drawer_layout);
         actionBarDrawerToggle = new ActionBarDrawerToggle(this,
                 drawerLayout,
                 R.string.nav_open,
@@ -50,6 +54,8 @@ public class DebugActivity extends AppCompatActivity {
 
         // to make the Navigation drawer icon always appear on the action bar
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        setNavigationViewListener();
     }
 
     @Override
@@ -83,5 +89,15 @@ public class DebugActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_nav);
         return NavigationUI.navigateUp(navController, appBarConfiguration)
                 || super.onSupportNavigateUp();
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        return ActivityUtils.handleNavBarItemClicks(item, this, drawerLayout);
+    }
+
+    private void setNavigationViewListener() {
+        NavigationView navigationView = findViewById(R.id.nav_drawer);
+        navigationView.setNavigationItemSelectedListener(this);
     }
 }

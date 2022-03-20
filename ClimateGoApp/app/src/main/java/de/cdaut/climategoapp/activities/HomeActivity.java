@@ -52,7 +52,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         actionBarDrawerToggle.syncState();
 
         // to make the Navigation drawer icon always appear on the action bar
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar(). setDisplayHomeAsUpEnabled(true);
 
         setNavigationViewListener();
     }
@@ -93,29 +93,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-
-        Class<? extends AppCompatActivity> targetActivityClass;
-
-        switch (item.getItemId()) {
-            case R.id.nav_main:
-                targetActivityClass = HomeActivity.class;
-                break;
-            case R.id.nav_debug:
-                targetActivityClass = DebugActivity.class;
-                break;
-            default:
-                throw new IllegalAccessError("Illegal activity met in nav drawer");
-        }
-
-        if(targetActivityClass.equals(this.getClass())) {
-            drawerLayout.closeDrawers();
-            return false;
-        }
-
-        Intent targetIntent = new Intent(this, targetActivityClass);
-        startActivity(targetIntent);
-
-        return false;
+        return ActivityUtils.handleNavBarItemClicks(item, this, drawerLayout);
     }
 
     private void setNavigationViewListener() {
