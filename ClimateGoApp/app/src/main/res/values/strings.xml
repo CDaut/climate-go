@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">ClimateGoApp</string>
+    <string name="action_settings">Settings</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">Main Fragment</string>
+    <string name="debug_fragment_label">Debug Fragment</string>
+    <string name="btn_test">Test</string>
+    <string name="nav_main_label">Main</string>
+    <string name="nav_debug_frag_label">Debug view</string>
+    <string name="nav_open">Open</string>
+    <string name="nav_close">Close</string>
+</resources>
