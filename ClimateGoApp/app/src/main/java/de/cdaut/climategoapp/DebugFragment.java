@@ -22,6 +22,11 @@ public class DebugFragment extends Fragment {
 
         binding = FragmentDebugBinding.inflate(inflater, container, false);
 
+        //TODO: Add proper Function when button is pressed here
+        this.binding.buttonTest.setOnClickListener(view -> {
+            this.binding.debugView.setText("NewText");
+        });
+
         return binding.getRoot();
 
     }

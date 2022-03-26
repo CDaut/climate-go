@@ -105,6 +105,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         Fragment targetFragment;
 
         //determine which fragment to switch to
+        //TODO: switch this to some better switch value like a tag
         switch (item.getItemId()) {
             case R.id.nav_main:
                 targetFragment = new HomeFragment();

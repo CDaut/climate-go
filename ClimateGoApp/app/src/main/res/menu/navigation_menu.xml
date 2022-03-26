@@ -5,10 +5,12 @@
 
     <item
         android:id="@+id/nav_main"
+        android:tag="nav_main"
         android:title="@string/nav_main_label" />
 
     <item
         android:id="@+id/nav_debug"
+        android:tag="nav_debug"
         android:title="@string/nav_debug_frag_label" />
 
 
