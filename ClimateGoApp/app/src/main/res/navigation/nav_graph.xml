@@ -3,21 +3,21 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/HomeFragment">
+    app:startDestination="@id/home_fragment">
 
     <fragment
-        android:id="@+id/HomeFragment"
+        android:id="@+id/home_fragment"
         android:name="de.cdaut.climategoapp.HomeFragment"
         android:label="@string/first_fragment_label"
         tools:layout="@layout/fragment_home"/>
 
-    <fragment android:id="@+id/DebugFragment"
+    <fragment android:id="@+id/debug_fragment"
         android:name="de.cdaut.climategoapp.DebugFragment"
         android:label="@string/debug_fragment_label"
         tools:layout="@layout/fragment_debug">
         <action
             android:id="@+id/action_DebugFragment_to_HomeFragment"
-            app:destination="@id/HomeFragment" />
+            app:destination="@id/home_fragment" />
     </fragment>
 
 </navigation>

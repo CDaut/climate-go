@@ -1,6 +1,5 @@
 package de.cdaut.climategoapp.activities;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 
@@ -9,11 +8,14 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import de.cdaut.climategoapp.DebugFragment;
+import de.cdaut.climategoapp.HomeFragment;
 import de.cdaut.climategoapp.R;
 import de.cdaut.climategoapp.databinding.ActivityHomeBinding;
 
@@ -52,7 +54,13 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         actionBarDrawerToggle.syncState();
 
         // to make the Navigation drawer icon always appear on the action bar
-        getSupportActionBar(). setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        //add the Home Fragment to the Fragment container
+        this.getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.home_act_fragment_container, new HomeFragment())
+                .commit();
 
         setNavigationViewListener();
     }
@@ -93,7 +101,30 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        return ActivityUtils.handleNavBarItemClicks(item, this, drawerLayout);
+
+        Fragment targetFragment;
+
+        //determine which fragment to switch to
+        switch (item.getItemId()) {
+            case R.id.nav_main:
+                targetFragment = new HomeFragment();
+                break;
+            case R.id.nav_debug:
+                targetFragment = new DebugFragment();
+                break;
+            default:
+                throw new IllegalAccessError("Illegal activity met in nav drawer");
+        }
+
+        //switch to the appropriate Fragment
+        this.getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.home_act_fragment_container, targetFragment)
+                .commit();
+
+        //close the nav drawer after switching fragments
+        this.drawerLayout.closeDrawers();
+        return false;
     }
 
     private void setNavigationViewListener() {
