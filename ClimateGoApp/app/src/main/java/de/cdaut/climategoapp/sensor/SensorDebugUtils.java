@@ -8,9 +8,11 @@ public final class SensorDebugUtils {
         throw new IllegalAccessError("Utility Class");
     }
 
-    public static List<String> readSensorData(){
+    public static List<String> readSensorData() {
         ArrayList<String> data = new ArrayList<>();
         data.add("Test");
+        data.add("a");
+        data.add("b");
         return data;
     }
 }
