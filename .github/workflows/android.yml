@@ -23,4 +23,4 @@ jobs:
     - name: Grant execute permission for gradlew
       run: chmod +x ./ClimateGoApp/gradlew
     - name: Build with Gradle
-      run: ./ClimateGoApp/gradlew build
+      run: cd ClimateGoApp && ./gradlew build
