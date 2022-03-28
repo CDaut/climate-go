@@ -10,4 +10,6 @@
     <string name="nav_open">Open</string>
     <string name="nav_close">Close</string>
     <string name="bt_required">Bluetooth is required to connect to the sensor</string>
+    <string name="loc_required">Location permissions are required to execute Bluetooth low-energy scans</string>
+    <string name="enable_loc_note">Please enable location permissions in the app settings to allow Bluetooth low-energy scanning</string>
 </resources>
